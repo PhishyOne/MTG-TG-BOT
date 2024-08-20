@@ -1,4 +1,4 @@
-anyio==4.4.0
+xcanyio==4.4.0
 blinker==1.8.2
 certifi==2024.7.4
 charset-normalizer==3.3.2
@@ -21,3 +21,4 @@ typing_extensions==4.12.2
 urllib3==2.2.2
 Werkzeug==3.0.3
 zipp==3.19.2
+vvxz

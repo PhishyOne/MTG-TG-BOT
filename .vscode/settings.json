@@ -1,0 +1,5 @@
+{
+    "terminal.integrated.tabs.defaultIcon": "sign-out",
+    "workbench.startupEditor": "terminal"
+    
+}
