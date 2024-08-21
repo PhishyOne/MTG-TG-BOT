@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 from vertexai.generative_models import GenerativeModel
 from nltk.corpus import brown
 import telegram
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Chat
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Chat  # Import Chat here
 
 project_id = "directed-will-431806-n0"
 vertexai.init(project=project_id, location="us-central1")
