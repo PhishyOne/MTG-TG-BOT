@@ -6,29 +6,49 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from vertexai.generative_models import GenerativeModel
 from nltk.corpus import brown
+import telegram
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# TODO(developer): Update and un-comment below line
 project_id = "directed-will-431806-n0"
 vertexai.init(project=project_id, location="us-central1")
 model = GenerativeModel("gemini-1.5-flash-001")
 
-def process_user_message(message):
+bot_token = "7354552066:AAE8IDXad2Qr7ElID5XNhOPLBnNB5N53Tb0"
+
+# Initialize the Telegram bot
+updater = Updater(bot_token, use_context=True)
+dispatcher = updater.dispatcher
+
+def process_user_message(update, context):
+    message = update.message.text
     # Preprocess message (remove stop words, tokenize, etc.)
     words = [word for word in word_tokenize(message.lower()) if word not in stopwords.words('english')]
 
-            # Check for keywords or intents
+    # Check for keywords or intents
     if "card" in words:
-                        # Extract card name
+        # Extract card name
         card_name = " ".join([word for word in words if word not in ["card", "what", "is", "im", "for", "called", "a", "looking"]])
         cards = Card.where(name=card_name).all()   
         card_list = " ".join(str(item) for item in cards)
         response = model.generate_content(
-	    "Here are some magic: the gatheting cards. Please list them with important information about them" + card_list
+            "Here are some magic: the gatheting cards. Please list them with important information about them" + card_list
         )
-        print(response.text)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
 
     elif "set" in words:
         set_name = " ".join([word for word in words if word not in ["set", "what", "is", "I/'m", "for", "called", "a", "looking"]])
+        # ... handle set-related queries
 
-user_message = "Im looking for a card called Krenko"
-process_user_message(user_message)                              # ... other intents                                                      # ... other intents                                                                 # Example usag
+    else:
+        # Handle other intents or general conversation
+        response = model.generate_content(
+            "You said: " + message
+        )
+        context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
+
+# Handle messages from users
+dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, process_user_message))
+
+# Start the bot
+updater.start_polling()
+updater.idle()
