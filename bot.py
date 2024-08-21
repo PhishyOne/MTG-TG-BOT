@@ -4,7 +4,7 @@ import nltk
 from mtgsdk import Card
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from vertexai.generative_models import GenerativeModel
+from vertexai.generative_models import GenerativeModel, ChatSession  # Import ChatSession
 from nltk.corpus import brown
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Chat  # Import Chat here
@@ -41,9 +41,8 @@ def process_user_message(update, context):
 
     else:
         # Handle other intents or general conversation
-        response = model.generate_content(
-            "You said: " + message
-        )
+        chat = model.start_chat()  # Create a ChatSession
+        response = chat.send_message(message)  # Send the message to the chat
         context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
 
 # Handle messages from users
