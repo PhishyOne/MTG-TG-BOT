@@ -24,9 +24,7 @@ def process_user_message(update, context):
     # Preprocess message (remove stop words, tokenize, etc.)
     words = [word for word in word_tokenize(message.lower()) if word not in stopwords.words('english')]
 
-    # Check for keywords or intents
     if "card" in words:
-        # Extract card name
         card_name = " ".join([word for word in words if word not in ["card", "what", "is", "im", "for", "called", "a", "looking"]])
         cards = Card.where(name=card_name).all()   
         card_list = " ".join(str(item) for item in cards)
@@ -36,7 +34,6 @@ def process_user_message(update, context):
         context.bot.send_message(chat_id=update.effective_chat.id, text=response.text)
 
     elif "set" in words:
-        set_name = " ".join([word for word in words if word not in ["set", "what", "is", "I/'m", "for", "called", "a", "looking"]])
         # ... handle set-related queries
 
     else:
